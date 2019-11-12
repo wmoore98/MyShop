@@ -20,10 +20,11 @@ namespace MyShop.WebUI.Tests.Controllers
             // Arrange
             const string productId = "1";
             IRepository<Basket> basketContext = new MockContext<Basket>();
+            IRepository<BasketItem> basketItemsContext = new MockContext<BasketItem>();
             IRepository<Product> productContext = new MockContext<Product>();
             MockHttpContext httpContext = new MockHttpContext();
 
-            IBasketService basketService = new BasketService(productContext, basketContext);
+            IBasketService basketService = new BasketService(productContext, basketContext, basketItemsContext);
 
             // Act
             basketService.AddToBasket(httpContext, productId);
@@ -42,10 +43,11 @@ namespace MyShop.WebUI.Tests.Controllers
             // Arrange
             const string productId = "1";
             IRepository<Basket> basketContext = new MockContext<Basket>();
+            IRepository<BasketItem> basketItemsContext = new MockContext<BasketItem>();
             IRepository<Product> productContext = new MockContext<Product>();
             MockHttpContext httpContext = new MockHttpContext();
 
-            IBasketService basketService = new BasketService(productContext, basketContext);
+            IBasketService basketService = new BasketService(productContext, basketContext, basketItemsContext);
             BasketController controller = new BasketController(basketService);
             controller.ControllerContext = new System.Web.Mvc.ControllerContext(httpContext, new System.Web.Routing.RouteData(), controller);
 
@@ -74,7 +76,9 @@ namespace MyShop.WebUI.Tests.Controllers
             basket.BasketItems.Add(new BasketItem() { ProductId = "2", Quantity = 1 });
             basketContext.Insert(basket);
 
-            IBasketService basketService = new BasketService(productContext, basketContext);
+            IRepository<BasketItem> basketItemsContext = new MockContext<BasketItem>();
+
+            IBasketService basketService = new BasketService(productContext, basketContext, basketItemsContext);
             BasketController controller = new BasketController(basketService);
             MockHttpContext httpContext = new MockHttpContext();
             httpContext.Response.Cookies.Add(new System.Web.HttpCookie("eCommerceBasket") { Value = basket.Id });

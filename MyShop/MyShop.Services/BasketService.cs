@@ -14,13 +14,15 @@ namespace MyShop.Services
     {
         IRepository<Product> productContext;
         IRepository<Basket> basketContext;
+        IRepository<BasketItem> basketItemsContext;
 
         public const string BasketSessionName = "eCommerceBasket";
 
-        public BasketService(IRepository<Product> ProductContext, IRepository<Basket> BasketContext)
+        public BasketService(IRepository<Product> ProductContext, IRepository<Basket> BasketContext, IRepository<BasketItem> BasketItemsContext)
         {
             this.productContext = ProductContext;
             this.basketContext = BasketContext;
+            this.basketItemsContext = BasketItemsContext;
 
         }
 
@@ -88,6 +90,9 @@ namespace MyShop.Services
 
         public void RemoveFromBasket(HttpContextBase httpContext, string itemId)
         {
+            basketItemsContext.Delete(itemId);
+            basketItemsContext.Commit();
+/*
             Basket basket = GetBasket(httpContext, true);
             BasketItem item = basket.BasketItems.FirstOrDefault(i => i.Id == itemId);
 
@@ -96,7 +101,7 @@ namespace MyShop.Services
                 basket.BasketItems.Remove(item);
                 basketContext.Commit();
             }
-
+*/
         }
 
         public List<BasketItemViewModel> GetBasketItems(HttpContextBase httpContext)
