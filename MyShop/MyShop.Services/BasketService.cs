@@ -151,11 +151,15 @@ namespace MyShop.Services
 
         public void ClearBasket(HttpContextBase httpContext) {
             Basket basket = GetBasket(httpContext, false);
-            //basket.BasketItems.Clear(); // This leaves orphans - simply NULLs basketId
-            //basketContext.Commit();
+            basket.BasketItems.Clear(); // This leaves orphans - simply NULLs basketId
+            basketContext.Commit();
 
-            basket.BasketItems.ToList().ForEach(item => basketItemsContext.Delete(item.Id)); // sad way to do it
-            basketItemsContext.Commit();
+            // The basic issue is that instead of deleting the basket, we are simply emptying it.
+            // .Clear() merely nulls out the parent Id, leaving orphans in the database
+            // This runs a foreach loop on the basket items and deletes each one individually, not efficient, but effective.
+            // As long as the basket items are small in number, the efficiency issue is minimal
+//            basket.BasketItems.ToList().ForEach(item => basketItemsContext.Delete(item.Id)); // sad way to do it
+//            basketItemsContext.Commit();
 
         }
     }
