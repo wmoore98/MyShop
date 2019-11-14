@@ -11,7 +11,7 @@ namespace MyShop.WebUI.Tests.Mocks
     public class MockContext<T> : IRepository<T> where T : BaseEntity
     {
         List<T> items;
-        string className;
+        string className = typeof(T).Name;
 
         public MockContext()
         {

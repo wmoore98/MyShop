@@ -5,3 +5,9 @@
 <h3>@ViewBag.Message</h3>
 
 <p>Use this area to provide additional information.</p>
+
+@using (Html.BeginForm("Checkout", "Basket", FormMethod.Post, new { }))
+{
+    @Html.AntiForgeryToken()
+    <input type="submit" value="Checkout" class="btn btn-default" />
+}

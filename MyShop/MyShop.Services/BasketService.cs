@@ -148,5 +148,15 @@ namespace MyShop.Services
 
             return model;
         }
+
+        public void ClearBasket(HttpContextBase httpContext) {
+            Basket basket = GetBasket(httpContext, false);
+            //basket.BasketItems.Clear(); // This leaves orphans - simply NULLs basketId
+            //basketContext.Commit();
+
+            basket.BasketItems.ToList().ForEach(item => basketItemsContext.Delete(item.Id)); // sad way to do it
+            basketItemsContext.Commit();
+
+        }
     }
 }
